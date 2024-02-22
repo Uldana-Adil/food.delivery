@@ -3,6 +3,8 @@ import { ErrorResponse } from "./types/errorResponse"
 
 export const errorMiddleware = (err:any, req:Request, res:Response, next:NextFunction) => {
 
+    console.log(err)
+    
     if(!(err instanceof ErrorResponse)) {
         err = ErrorResponse.internal(err.message)
     }

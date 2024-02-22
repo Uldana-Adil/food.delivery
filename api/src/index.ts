@@ -12,6 +12,8 @@ const port = process.env.PORT || 12301;
 
 app.use(bodyParser.json());
 
+app.use('/uploads', express.static('src/uploads'));
+
 app.use('/api', router);
 
 // Обработка несуществующих маршрутов
