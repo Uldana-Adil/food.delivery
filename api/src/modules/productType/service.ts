@@ -30,7 +30,7 @@ class Service {
     }
 
     async findAll():Promise<ProductType[]> {
-        return await this.repository.find({where:{deleted:false}})
+        return this.repository.find({where:{deleted:false}})
     }
 
     async findOne(id:number):Promise<ProductType | null> {
