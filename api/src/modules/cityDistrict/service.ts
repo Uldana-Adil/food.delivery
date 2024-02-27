@@ -14,11 +14,11 @@ class Service {
         this.cityRepository = AppDataSource.getRepository(City)
     }
     async findAll():Promise<CityDistrict[]> {
-        return this.repository.find({relations:['districts'], where:{deleted:false}})
+        return this.repository.find({relations:['city'], where:{deleted:false}})
     }
 
     async findOne(id:number):Promise<CityDistrict | null> {
-        return this.repository.findOne({relations:['districts'], where:{id,deleted:false}})
+        return this.repository.findOne({relations:['city'], where:{id,deleted:false}})
     }
 
     async create(dto:CityDistrictCreateDto):Promise<CityDistrict> {
@@ -33,7 +33,7 @@ class Service {
     }
 
     async update(dto:CityDistrictUpdateDto):Promise<CityDistrict> {
-        const cityDistrict = await this.repository.findOneBy({id:dto.id})
+        const cityDistrict = await this.repository.findOne({where:{id:dto.id},relations:['city']})
         if(!cityDistrict) {
             throw ErrorResponse.notFound("CITY_NOT_FOUND")
         }

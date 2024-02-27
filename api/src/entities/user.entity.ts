@@ -1,5 +1,7 @@
 import { BaseEntity } from "./base.entity";
-import { Column, Entity } from 'typeorm'
+import { Column, Entity, OneToMany } from 'typeorm'
+import { UserAddress } from "./userAddress.entity";
+import { UserPaymentCard } from "./userPaymentCard.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -17,4 +19,10 @@ export class User extends BaseEntity {
 
     @Column()
     passwordHash!:string
+
+    @OneToMany(()=>UserAddress, (userAddress)=>userAddress.user)
+    userAddresses!:UserAddress[]
+
+    @OneToMany(()=>UserPaymentCard, (userPaymentCard)=>userPaymentCard.user)
+    userPaymentCards!:UserPaymentCard[]
 }

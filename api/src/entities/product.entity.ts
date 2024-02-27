@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { ProductType } from "./productType.entity";
 import { ProductImage } from "./productImage.entity";
+import { OrderProduct } from "./orderProduct.entity";
 
 @Entity()
 export class Product extends BaseEntity {
@@ -31,5 +32,8 @@ export class Product extends BaseEntity {
 
     @OneToMany(()=>ProductImage, (productImage)=>productImage.product)
     images!:ProductImage[]
+
+    @OneToMany(()=>OrderProduct, op=>op.product)
+    orderProducts!:OrderProduct[]
 
 }

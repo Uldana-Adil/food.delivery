@@ -8,7 +8,7 @@ import { UserCreateDto } from "../user/dto/userCreate.dto"
 import { PayloadDto } from "./dto/payload.dto"
 import jwt from 'jsonwebtoken'
 class Service {
-    async login(dto:LoginDto) {
+    async login(dto:LoginDto):Promise<[PayloadDto, string]> {
         const user = await userService.findByEmailOrPhone(dto.query)
         if(!user) {
             throw ErrorResponse.notFound("USER_NOT_FOUND")
@@ -23,7 +23,7 @@ class Service {
         }
         return [payload, this.generateToken(payload)]
     }
-    async register(dto:RegisterDto) {
+    async register(dto:RegisterDto):Promise<[PayloadDto, string]> {
         let existUser = await userService.findByEmailOrPhone(dto.email)
         if(existUser) {
             throw ErrorResponse.badRequest("USER_ALREADY_EXISTS")
@@ -46,6 +46,13 @@ class Service {
             phone:user.phone
         }
         return [payload, this.generateToken(payload)]
+    }
+
+    async resetPassword(email:string):Promise<void> {
+        const user = await userService.findByEmailOrPhone(email)
+        if(!user) {
+            throw ErrorResponse.notFound("USER_NOT_FOUND")
+        }
     }
 
     private generateToken(payload:PayloadDto) {

@@ -23,6 +23,16 @@ class Controller {
             next(err)
         }
     }
+
+    async resetPassword(req: Request, res: Response, next: NextFunction) {
+        try {
+            await service.resetPassword(req.body.email)
+            return res.sendStatus(204)
+        }
+        catch (err) {
+            next(err)
+        }
+    }
 }
 
 export default new Controller()
