@@ -9,8 +9,8 @@ export class ErrorResponse {
         this.errors = errors
     }
 
-    static notFound(message:string) {
-        return new ErrorResponse(404, message)
+    static notFound(message:string, errors?:any) {
+        return new ErrorResponse(404, message, errors)
     }
 
     static badRequest(message:string, errors?:any) {
@@ -29,7 +29,7 @@ export class ErrorResponse {
         return new ErrorResponse(409, message)
     }
 
-    static internal(message:string) {
-        return new ErrorResponse(500, message)
+    static internal(message:string, errors?:any) {
+        return new ErrorResponse(500, message, errors)
     }
 }

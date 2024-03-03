@@ -36,13 +36,13 @@ class Service {
     }
 
     async findAll():Promise<Product[]> {
-        return await this.repository.find({relations:['images']})
+        return await this.repository.find({relations:['images', 'productType']})
     }
 
     async findOne(id:number):Promise<Product | null> {
         return this.repository.findOne({
             where:{id:id},
-            relations:['images']
+            relations:['images','productType']
         })
     }
 
