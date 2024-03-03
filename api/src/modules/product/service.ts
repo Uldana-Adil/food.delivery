@@ -38,6 +38,7 @@ class Service {
 
     async findAll():Promise<Product[]> {
         return await this.repository.find({relations:['images', 'productType']})
+<<<<<<< HEAD
     }
 
     async findByFilter(filter:ProductFilterDto):Promise<[Product[],number]> {
@@ -61,6 +62,8 @@ class Service {
             }
         }).getManyAndCount()
         return data
+=======
+>>>>>>> ae759ab05419361e6d9530e429660e6de9027345
     }
 
     async findOne(id:number):Promise<Product | null> {
