@@ -11,6 +11,11 @@ class Service {
     constructor() {
         this.repository = AppDataSource.getRepository(UserPaymentCard)
     }
+
+    async findOne(id:number):Promise<UserPaymentCard | null> {
+        return this.repository.findOne({where:{ id } })
+    }
+
     async create(dto:UserPaymentCardCreateDto, userId:number):Promise<UserPaymentCard> {
         const user = await userService.findById(userId)
         if (!user) {

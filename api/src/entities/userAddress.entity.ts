@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { City } from "./city.entity";
 import { CityDistrict } from "./cityDistrict.entity";
@@ -31,6 +31,6 @@ export class UserAddress extends BaseEntity {
     @ManyToOne(()=>User, u=>u.userAddresses)
     user!: User
 
-    @ManyToOne(()=>Order, o=>o.userAddresses, {nullable:true})
-    order?: Order
+    @OneToMany(()=>Order, o=>o.userAddress, {nullable:true})
+    orders?: Order[]
 }

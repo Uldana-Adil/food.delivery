@@ -18,7 +18,10 @@ class Service {
     }
 
     async findOne(id: number): Promise<UserAddress | null> {
-        return this.repository.findOneBy({ id })
+        return this.repository.findOne({ 
+            where:{id},
+            relations:['city','cityDistrict']
+         })
     }
 
     async create(dto: UserAddressCreateDto, userId: number): Promise<UserAddress> {

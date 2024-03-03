@@ -6,6 +6,7 @@ import { ProductCreateDto } from './dto/productCreate.dto';
 import { ProductType } from '../../entities/productType.entity';
 import { ProductImage } from '../../entities/productImage.entity';
 import { ProductUpdateDto } from './dto/productUpdate.dto';
+import ProductFilterDto from './dto/productFilter.dto';
 
 class Service {
     repository:Repository<Product>
@@ -36,13 +37,36 @@ class Service {
     }
 
     async findAll():Promise<Product[]> {
-        return await this.repository.find({relations:['images']})
+        return await this.repository.find({relations:['images', 'productType']})
+    }
+
+    async findByFilter(filter:ProductFilterDto):Promise<[Product[],number]> {
+        const data = await this.repository
+        .createQueryBuilder('product')
+        .innerJoinAndSelect('product.images','images')
+        .innerJoinAndSelect('product.productType', 'productType')
+        .where((qb)=>{
+            qb.andWhere('product.deleted = :deleted', {deleted:false})
+            if(filter.productTypeId) {
+                qb.andWhere('productType.id = :productTypeId', {productTypeId:filter.productTypeId})
+            }
+            if(filter.query) {
+                qb.andWhere('(product.name LIKE :query or product.article LIKE :query)', {query:`%${filter.query}%`})
+            }
+            if(filter.priceFrom) {
+                qb.andWhere('product.price >= :priceFrom', {priceFrom:filter.priceFrom})
+            }
+            if(filter.priceTo) {
+                qb.andWhere('product.price <= :priceTo', {priceTo:filter.priceTo})
+            }
+        }).getManyAndCount()
+        return data
     }
 
     async findOne(id:number):Promise<Product | null> {
         return this.repository.findOne({
             where:{id:id},
-            relations:['images']
+            relations:['images','productType']
         })
     }
 

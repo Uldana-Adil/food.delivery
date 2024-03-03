@@ -1,13 +1,21 @@
-import { Entity, OneToMany } from "typeorm";
+import { Entity, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { OrderProduct } from "./orderProduct.entity";
 import { UserAddress } from "./userAddress.entity";
+import { UserPaymentCard } from "./userPaymentCard.entity";
+import { OrderStatusHistory } from "./orderStatusHistory.entity";
 
 @Entity()
 export class Order extends BaseEntity {
     @OneToMany(()=>OrderProduct, og=>og.order)
-    goods!: OrderProduct[]
+    products?: OrderProduct[]
 
-    @OneToMany(()=>UserAddress, ua=>ua.order)
-    userAddresses!: UserAddress[]
+    @ManyToOne(()=>UserAddress, ua=>ua.orders)
+    userAddress!: UserAddress
+
+    @ManyToOne(()=>UserPaymentCard, upc=>upc.orders)
+    userPaymentCard!: UserPaymentCard
+
+    @OneToMany(()=>OrderStatusHistory, osh=>osh.order)
+    orderStatusHistories?: OrderStatusHistory[]
 }
