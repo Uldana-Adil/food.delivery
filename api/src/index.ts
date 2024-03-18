@@ -5,12 +5,18 @@ import { AppDataSource } from './data-source';
 import dotenv from 'dotenv'
 import router from './router';
 import { errorMiddleware } from './middlewares/error.middleware';
+import cors from 'cors';
 dotenv.config()
 
 const app = express();
 const port = process.env.PORT || 12301;
+app.use(cors({
+  origin: process.env.CLIENT_URL as string,
+  credentials:true
+}))
 
 app.use(bodyParser.json());
+
 
 app.use('/uploads', express.static('src/uploads'));
 

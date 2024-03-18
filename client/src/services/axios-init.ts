@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const host = axios.create({
+export const HOST = axios.create({
     baseURL:process.env.REACT_APP_API_URL,
     withCredentials: true,
     headers: {
@@ -8,15 +8,10 @@ const host = axios.create({
     }
 })
 
-const fileHost = axios.create({
+export const FILE_HOST = axios.create({
     baseURL:process.env.REACT_APP_API_URL,
     withCredentials: true,
     headers: {
         'Content-Type': 'multipart/form-data',
     }
 })
-
-export default  {
-    host,
-    fileHost
-}

@@ -6,23 +6,29 @@ import { UserPaymentCard } from "./userPaymentCard.entity";
 @Entity()
 export class User extends BaseEntity {
     @Column()
-    phone!:string
+    phone!: string
 
     @Column()
-    email!:string
+    email!: string
 
     @Column()
-    name!:string
+    name!: string
 
     @Column()
-    lastName!:string
+    lastName!: string
 
     @Column()
-    passwordHash!:string
+    passwordHash!: string
 
-    @OneToMany(()=>UserAddress, (userAddress)=>userAddress.user)
-    userAddresses!:UserAddress[]
+    @Column({ nullable: true })
+    key?: string
 
-    @OneToMany(()=>UserPaymentCard, (userPaymentCard)=>userPaymentCard.user)
-    userPaymentCards!:UserPaymentCard[]
+    @Column({ default: false, nullable: true })
+    isActive?: boolean
+
+    @OneToMany(() => UserAddress, (userAddress) => userAddress.user)
+    userAddresses!: UserAddress[]
+
+    @OneToMany(() => UserPaymentCard, (userPaymentCard) => userPaymentCard.user)
+    userPaymentCards!: UserPaymentCard[]
 }

@@ -8,7 +8,7 @@ export class ProfilePaymentCardDto {
     constructor(data:UserPaymentCard) {
         this.id = data.id
         this.name = data.name
-        this.cardNumber = data.cardNumber
+        this.cardNumber = data.cardNumber.substring(0, 4) + '******' + data.cardNumber.substring(12, 16)
         this.expirationDate = data.expirationDate
     }
 }

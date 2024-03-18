@@ -18,6 +18,12 @@ export class Product extends BaseEntity {
     @Column()
     price!:number
 
+    @Column({nullable:true})
+    whosalePrice!:number
+
+    @Column({nullable:true})
+    whosaleQuantity!:number
+
     @Column()
     dimensionValue!:number
 

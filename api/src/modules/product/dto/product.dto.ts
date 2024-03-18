@@ -9,6 +9,8 @@ export default class ProductDto {
     dimensionValue: number
     dimensions: string
     price: number
+    whosalePrice:number
+    whosaleQuantity:number
     productType: ProductTypeDto
     images: string[]
     constructor(data: Product) {
@@ -21,5 +23,7 @@ export default class ProductDto {
         this.price = data.price
         this.productType = new ProductTypeDto(data.productType)
         this.images = data.images.map(image => image.path)
+        this.whosalePrice = data.whosalePrice
+        this.whosaleQuantity = data.whosaleQuantity
     }
 }

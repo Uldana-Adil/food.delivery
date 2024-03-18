@@ -12,6 +12,16 @@ class Controller {
         }
     }
 
+    async findAllByFilter(req:Request, res:Response, next:NextFunction) {
+        try {
+            const data = await service.findByFilter(req.body)
+            return res.json(data)
+        }
+        catch (err) {
+            next(err)
+        }
+    }
+
     async findOne(req:Request, res:Response, next:NextFunction) {
         try {
             const data = await service.findOne(+req.params.id)

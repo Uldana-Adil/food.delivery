@@ -12,9 +12,13 @@ import { UserAddressUpdateDto } from "../userAddress/dto/userAddressUpdate.dto";
 import { ProfilePaymentCardDto } from "./dto/profilePaymentCard.dto";
 import { UserPaymentCardCreateDto } from "../userPaymentCard/dto/userPaymentCardCreate.dto";
 import { UserPaymentCardUpdateDto } from "../userPaymentCard/dto/userPaymentCardUpdate.dto";
+import mailService from '../mail/service'
+import MailOptionDto from "../mail/dto/mailOption.dto";
+import cityService from '../city/service'
+
 class Service {
     async getProfileInfo(payload:PayloadDto):Promise<ProfileInfoDto> {
-        const user = await userService.findByEmailOrPhone(payload.email)
+        const user = await userService.findByEmail(payload.email)
         if(!user) {
             throw ErrorResponse.notFound("USER_NOT_FOUND")
         }
@@ -35,6 +39,7 @@ class Service {
             ...dto,
             id:payload.id
         })
+        await mailService.send(MailOptionDto.passwordChanged(payload.email))
         return new ProfileInfoDto(user)
     }
 

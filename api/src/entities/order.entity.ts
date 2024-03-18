@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { OrderProduct } from "./orderProduct.entity";
 import { UserAddress } from "./userAddress.entity";
@@ -7,6 +7,10 @@ import { OrderStatusHistory } from "./orderStatusHistory.entity";
 
 @Entity()
 export class Order extends BaseEntity {
+
+    @Column({nullable:true})
+    comment?: string
+
     @OneToMany(()=>OrderProduct, og=>og.order)
     products?: OrderProduct[]
 

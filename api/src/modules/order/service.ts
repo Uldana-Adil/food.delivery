@@ -32,6 +32,10 @@ class Service {
 
                 const order = new Order()
 
+                if(dto.comments) {
+                    order.comment = dto.comments
+                }
+
                 let userAddress: UserAddress | null
                 if (dto.userAddressId) {
                     userAddress = await userAddressService.findOne(dto.userAddressId)

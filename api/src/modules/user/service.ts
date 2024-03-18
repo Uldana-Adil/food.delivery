@@ -13,18 +13,11 @@ class Service {
         this.repository = AppDataSource.getRepository(User)
     }
 
-    async findByEmailOrPhone(query: string): Promise<User | null> {
-        let user = await this.repository.findOne({
+    async findByEmail(query: string): Promise<User | null> {
+        return this.repository.findOne({
             where: { email: query },
             relations: ['userAddresses', 'userAddresses.city', 'userAddresses.cityDistrict', 'userPaymentCards']
         })
-        if (!user) {
-            return this.repository.findOne({
-                where: { phone: query },
-                relations: ['userAddresses', 'userAddresses.city', 'userAddresses.cityDistrict', 'userPaymentCards']
-            })
-        }
-        return user
     }
 
     async findById(id: number): Promise<User | null> {
@@ -63,6 +56,37 @@ class Service {
         }
         user.passwordHash = await bcrypt.hash(dto.newPassword, 5)
         return this.repository.save(user)
+    }
+
+    async setPassword(email:string, password:string):Promise<void> {
+        const user = await this.findByEmail(email)
+        if(!user) {
+            throw ErrorResponse.notFound("USER_NOT_FOUND")
+        }
+        user.passwordHash = await bcrypt.hash(password, 5)
+        await this.repository.save(user)
+    }
+
+    async setActivationKey(email:string):Promise<string>{
+        const user = await this.findByEmail(email)
+        if(!user) {
+            throw ErrorResponse.notFound("USER_NOT_FOUND")
+        }
+        user.key = await bcrypt.hash(user.email, 5)
+        await this.repository.save(user)
+        return user.key
+    }
+
+    async activateUser(email:string, key:string):Promise<void> {
+        const user = await this.findByEmail(email)
+        if(!user) {
+            throw ErrorResponse.notFound("USER_NOT_FOUND")
+        }
+        if(user.key !== key) {
+            throw ErrorResponse.unauthorized("INCORRECT_KEY")
+        }
+        user.isActive = true
+        await this.repository.save(user)
     }
 }
 

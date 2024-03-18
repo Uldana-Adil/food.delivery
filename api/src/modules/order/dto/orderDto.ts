@@ -7,6 +7,7 @@ import OrderStatusHistoryDto from "./orderStatusHistory.dto"
 export default class OrderDto {
     id: number
     date: Date
+    comment:string
     orderProducts: OrderProductDto[]
     address: ProfileAddressDto
     payment: ProfilePaymentCardDto
@@ -21,6 +22,7 @@ export default class OrderDto {
         if(this.statusHistories.length>0) {
             this.statusHistories = this.statusHistories.sort((a,b)=>b.date.getTime()-a.date.getTime())
         }
+        this.comment = data.comment ?? 'Заказ без комментариев'
     }
 
 }

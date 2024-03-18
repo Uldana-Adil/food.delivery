@@ -3,6 +3,7 @@ import { UserPaymentCardCreateDto } from "../../userPaymentCard/dto/userPaymentC
 import OrderCreateProductDto from "./orderCreate.Product.dto"
 
 export default class OrderCreateDto {
+    comments?: string
     userAddressId?: number
     userNewAddress?: UserAddressCreateDto
     userPaymentCardId?:number

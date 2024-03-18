@@ -3,7 +3,7 @@ import controller from './controller'
 const router = express.Router();
 
 router.post('/makeOrder', controller.makeOrder)
-router.get('/getOrders', controller.getOrders)
-router.get('/getOrder/:id', controller.getOrder)
+router.get('/orders', controller.getOrders)
+router.get('/orders/:id', controller.getOrder)
 
 export default router;

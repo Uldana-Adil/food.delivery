@@ -18,7 +18,7 @@ router.use('/auth', authRouter)
 
 router.use('/productType',authMiddleware, adminMiddleware, porductTypeRouter)
 router.use('/product', authMiddleware, adminMiddleware, productRouter)
-router.use('/city', authMiddleware, adminMiddleware, cityRouter)
+router.use('/city', authMiddleware, cityRouter)
 router.use('/cityDistrict', authMiddleware, adminMiddleware, cityDistrictRouter)
 router.use('/profile', authMiddleware, profileRouter)
 router.use('/orderStatus', authMiddleware, adminMiddleware, orderStatusRouter)

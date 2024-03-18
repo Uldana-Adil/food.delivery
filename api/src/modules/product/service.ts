@@ -7,6 +7,7 @@ import { ProductType } from '../../entities/productType.entity';
 import { ProductImage } from '../../entities/productImage.entity';
 import { ProductUpdateDto } from './dto/productUpdate.dto';
 import ProductFilterDto from './dto/productFilter.dto';
+import productTypeService from '../productType/service'
 
 class Service {
     repository:Repository<Product>
@@ -26,9 +27,11 @@ class Service {
         product.article = dto.article
         product.description = dto.description
         product.price = dto.price
+        product.whosalePrice = dto.whosalePrice
+        product.whosaleQuantity = dto.whosaleQuantity
         product.dimensionValue = dto.dimensionValue
         product.dimensions = dto.dimensions
-        const productType = await AppDataSource.getRepository(ProductType).findOneBy({id:dto.productTypeId})
+        const productType = await productTypeService.findOne(dto.productTypeId)
         if(!productType) {
             throw ErrorResponse.badRequest("PRODUCT_TYPE_NOT_FOUND")
         }
@@ -47,11 +50,12 @@ class Service {
         .innerJoinAndSelect('product.productType', 'productType')
         .where((qb)=>{
             qb.andWhere('product.deleted = :deleted', {deleted:false})
+            qb.andWhere('images.deleted = :deleted', {deleted:false})
             if(filter.productTypeId) {
                 qb.andWhere('productType.id = :productTypeId', {productTypeId:filter.productTypeId})
             }
             if(filter.query) {
-                qb.andWhere('(product.name LIKE :query or product.article LIKE :query)', {query:`%${filter.query}%`})
+                qb.andWhere('(LOWER(product.name) LIKE :query or LOWER(product.article) LIKE :query)', {query:`%${filter.query.toLowerCase()}%`})
             }
             if(filter.priceFrom) {
                 qb.andWhere('product.price >= :priceFrom', {priceFrom:filter.priceFrom})
@@ -61,7 +65,6 @@ class Service {
             }
         }).getManyAndCount()
         return data
-
     }
 
     async findOne(id:number):Promise<Product | null> {
@@ -81,6 +84,15 @@ class Service {
         product.price = dto.price ?? product.price
         product.dimensionValue = dto.dimensionValue ?? product.dimensionValue
         product.dimensions = dto.dimensions ?? product.dimensions
+        product.whosalePrice = dto.whosalePrice ?? product.whosalePrice
+        product.whosaleQuantity = dto.whosaleQuantity ?? product.whosaleQuantity
+        if(dto.productTypeId) {
+            const productType = await productTypeService.findOne(dto.productTypeId)
+            if(!productType) {
+                throw ErrorResponse.badRequest("PRODUCT_TYPE_NOT_FOUND")
+            }
+            product.productType = productType
+        }
         return this.repository.save(product)
     }
 

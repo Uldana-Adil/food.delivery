@@ -1,4 +1,4 @@
 export class LoginDto {
-    query!:string
+    email!:string
     password!:string
 }
