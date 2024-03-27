@@ -54,6 +54,7 @@ class Controller {
     async delete(req:Request, res:Response, next:NextFunction) {
         try {
             await service.delete(+req.params.id)
+            return res.sendStatus(204)
         }
         catch (err) {
             next(err)

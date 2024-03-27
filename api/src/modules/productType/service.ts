@@ -14,7 +14,7 @@ class Service {
     }
 
     async create(dto:ProductTypeCreateDto):Promise<ProductType> {
-        const existProductType = await this.repository.findOneBy({name:dto.name})
+        const existProductType = await this.repository.findOneBy({name:dto.name, deleted:false})
         if(existProductType) {
             throw ErrorResponse.conflict("PRODUCT_TYPE_ALREADY_EXISTS")
         }
@@ -30,7 +30,10 @@ class Service {
     }
 
     async findAll():Promise<ProductType[]> {
-        return this.repository.find({where:{deleted:false}})
+        return this.repository.find({
+            where:{deleted:false},
+            order:{id:'ASC'}
+        })
     }
 
     async findOne(id:number):Promise<ProductType | null> {

@@ -11,8 +11,8 @@ dotenv.config()
 const app = express();
 const port = process.env.PORT || 12301;
 app.use(cors({
-  origin: process.env.CLIENT_URL as string,
-  credentials:true
+  origin: [process.env.CLIENT_URL as string, process.env.ADMIN_URL as string],
+  credentials: true
 }))
 
 app.use(bodyParser.json());
