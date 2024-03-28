@@ -10,7 +10,7 @@ class Service {
     transporter: nodemailer.Transporter
     constructor() {
         this.transporter = nodemailer.createTransport({
-            service: 'Gmail',
+            service: 'Mail.ru',
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PWD

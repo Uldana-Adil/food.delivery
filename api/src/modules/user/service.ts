@@ -72,7 +72,7 @@ class Service {
         if(!user) {
             throw ErrorResponse.notFound("USER_NOT_FOUND")
         }
-        user.key = await bcrypt.hash(user.email, 5)
+        user.key = (await bcrypt.hash(user.email, 5)).replace(/\//g,'')
         await this.repository.save(user)
         return user.key
     }
