@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStores } from '../../store/MobXProvider'
+import { IProduct } from '../../types/products/IProduct'
 
 type Props = {}
 
 const Page = (props: Props) => {
     const { routerStore } = useStores()
+    const [list, setList] = useState<IProduct>([])
+
     useEffect(() => {
         routerStore.setCurrentPath('/products')
     }, [])
     return (
-        <div>Page</div>
+        <>
+            <h3>Продукты</h3>
+
+            
+
+        </>
     )
 }
 

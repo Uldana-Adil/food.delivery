@@ -5,6 +5,7 @@ import { ErrorResponse } from './types/errorResponse';
 
 export const authMiddleware = (req:Request, res:Response, next:NextFunction) => {
     const cookies = cookie.parse(req.headers.cookie || '')
+    console.log(cookies)
     jwt.verify(cookies.token, process.env.JWT_SECRET as string, (err, user) => {
         if(err) {
             throw ErrorResponse.unauthorized("UNAUTHORIZED")
