@@ -25,7 +25,7 @@ router.post('/', controller.create)
 router.post('/findAllByFilter',controller.findAllByFilter)
 router.put('/:id', controller.update)
 router.delete('/:id', controller.delete)
-router.post('/upload/:id', upload.single('image'), controller.appendImage)
+router.post('/image/:id', upload.single('image'), controller.appendImage)
 router.delete('/image/:id', controller.removeImage) 
 router.patch('/visible/:id', controller.toggleVisible)
 

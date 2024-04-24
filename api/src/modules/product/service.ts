@@ -40,7 +40,7 @@ class Service {
     }
 
     async findAll():Promise<Product[]> {
-        return await this.repository.find({relations:['images', 'productType']})
+        return await this.repository.find({relations:['images', 'productType'], where:{deleted:false}})
     }
 
     async findByFilter(filter:ProductFilterDto):Promise<[Product[],number]> {

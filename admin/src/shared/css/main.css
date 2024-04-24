@@ -59,6 +59,12 @@ aside .menu-container .menu .item:hover, aside .menu-container .menu .item.activ
   background-color: #b4f8b4;
 }
 
+main {
+  height: 100vh;
+  overflow: auto;
+  flex-grow: 1;
+}
+
 .login {
   flex-grow: 1;
   padding-top: 100px;
