@@ -12,5 +12,6 @@ router.delete('/address/:id',controller.deleteAddress)
 router.post('/paymentCard',controller.appendPaymentCard)
 router.put('/paymentCard',controller.updatePaymentCard)
 router.delete('/paymentCard/:id',controller.deletePaymentCard)
+router.get('/bonuses', controller.getProfileBonuses)
 
 export default router

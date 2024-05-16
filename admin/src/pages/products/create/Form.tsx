@@ -112,7 +112,7 @@ const Form = (props: Props) => {
             <div className="d-flex mb-3" style={{ gap: 20 }}>
 
                 <div className="form-group">
-                    <label className="form-label">Цена зп опт</label>
+                    <label className="form-label">Цена опт</label>
                     <input className='form-control' value={formValue.whosalePrice} onChange={(e) => setFormValue((prev) => ({
                         ...prev,
                         whosalePrice: +e.target.value

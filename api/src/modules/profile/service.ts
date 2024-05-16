@@ -15,6 +15,7 @@ import { UserPaymentCardUpdateDto } from "../userPaymentCard/dto/userPaymentCard
 import mailService from '../mail/service'
 import MailOptionDto from "../mail/dto/mailOption.dto";
 import cityService from '../city/service'
+import bonusTransactionService from '../bonusTransaction/service'
 
 class Service {
     async getProfileInfo(payload:PayloadDto):Promise<ProfileInfoDto> {
@@ -24,6 +25,12 @@ class Service {
         }
         return new ProfileInfoDto(user)
     }
+
+    async getProfileBonuses(payload:PayloadDto) {
+        const list = await bonusTransactionService.getTransactions(payload)
+        return list.reduce((acc, item)=> item.type === 'add'? acc + item.amount: acc - item.amount , 0)
+    }
+    
 
     //manage user info
     async updateBaseInfo(dto:UserUpdateDto, payload:PayloadDto):Promise<ProfileInfoDto> {

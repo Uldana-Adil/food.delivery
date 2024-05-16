@@ -5,21 +5,30 @@ import { Button, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { observer } from 'mobx-react-lite'
 import basketService from '../../services/basket-service'
 import { useNavigate } from 'react-router-dom'
+import MakeOrderResponse from '../../types/basket/MakeOrderResponse'
 
 type Props = {}
 
 const CheckoutTotal = (props: Props) => {
 
-    const { basketStore, orderStore } = useStores()
+    const { basketStore, orderStore, authStore } = useStores()
+    const [useBonus,setUseBonus] = useState<boolean>(false)
     const navigator = useNavigate()
 
     const handleMakeOrder = () => {
-        basketService.makeOrder({
-            userAddressId: orderStore.address?.id,
-            userPaymentCardId: orderStore.payment?.id,
-            products: basketStore.products,
-            comments: orderStore.comments
-        }).then((response) => {
+        let makeOrderResponse = new MakeOrderResponse()
+        makeOrderResponse.userAddressId = orderStore.address?.id
+        makeOrderResponse.userPaymentCardId = orderStore.payment?.id
+        makeOrderResponse.products = basketStore.products
+        makeOrderResponse.comments = orderStore.comments
+        if(useBonus) {
+            if(basketStore.getBasketTotal() + (basketStore.getBasketTotal()>6000?0:600) > authStore.currentBonus) {
+                makeOrderResponse.usedBonusAmount = authStore.currentBonus
+            } else {
+                makeOrderResponse.usedBonusAmount = basketStore.getBasketTotal() + (basketStore.getBasketTotal()>6000?0:600)
+            }
+        } 
+        basketService.makeOrder(makeOrderResponse).then((response) => {
             setNewOrder(response.data)
             handleShow()
         }).catch((error) => {
@@ -80,11 +89,34 @@ const CheckoutTotal = (props: Props) => {
                     </span>
                 </p>
 
+                {
+                    authStore.currentBonus > 0 && <>
+                    
+
+                    <p className="d-flex justify-content-between">
+                        <span>У вас есть бонусы</span>
+                        <span>
+                            {authStore.currentBonus} Б
+                        </span>
+                    </p>
+
+                    <div className="form-group">
+                        <input type="checkbox"  className='form-check-input me-2'
+                            checked={useBonus} onChange={(e)=>setUseBonus(e.target.checked)}
+                        /> Использовать бонусы
+                    </div>
+
+                    </>
+                }
+
                 <hr />
 
                 <h4 className='d-flex justify-content-between'>
                     <span>Итоговая сумма</span>
-                    <span>{formatNumberWithSpaces(basketStore.getBasketTotal() + (basketStore.getBasketTotal() > 6000 ? 0 : 600))} <i className="fa-solid fa-tenge-sign"></i></span>
+                    <span>
+                        {formatNumberWithSpaces(basketStore.getBasketTotal() + (basketStore.getBasketTotal() > 6000 ? 0 : 600) - (useBonus ? authStore.currentBonus : 0))}
+                        
+                         <i className="fa-solid fa-tenge-sign"></i></span>
                 </h4>
 
                 <Button onClick={() => handleMakeOrder()} className='mt-4 btn btn-primary'>Оформить заказ</Button>

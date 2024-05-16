@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'swiper/css';
 import './styles/main.min.css'
 import Router from './components/Router';
 import Nav from './components/nav/Index';
@@ -28,7 +29,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Nav />
-        <div className="page-content" style={{paddingBottom:80}}>
+        <div  className="page-content" style={{paddingBottom:80}}>
           <Router />
         </div>
         <Footer />

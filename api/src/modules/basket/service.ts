@@ -6,10 +6,14 @@ import OrderDto from '../order/dto/orderDto';
 import { PayloadDto } from '../auth/dto/payload.dto';
 import mailService from '../mail/service'
 import MailOptionDto from '../mail/dto/mailOption.dto';
+import bonusTransactopm from '../bonusTransaction/service';
 
 class Service {
     async makeOrder(dto:OrderCreateDto, payload:PayloadDto) {
         const order = await orderService.create(dto, payload)
+        if(dto.usedBonusAmount) {
+            await bonusTransactopm.setTransaction({amount: dto.usedBonusAmount, orderId: order.id, type: 'remove'}, payload)
+        }
         const orderDto = new OrderDto(order)
         await mailService.send(MailOptionDto.makeOrder(payload.email, orderDto))
         return orderDto

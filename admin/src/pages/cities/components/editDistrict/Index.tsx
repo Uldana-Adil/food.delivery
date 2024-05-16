@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Button, Modal } from 'react-bootstrap';
 import Form from './Form';
 import { ICity } from '../../../../types/cities/ICity';
+import { ICityDistrict } from '../../../../types/cities/ICityDistrict';
 
 type Props = {
-    item: ICity,
+    item: ICityDistrict,
     update: () => void
 }
 

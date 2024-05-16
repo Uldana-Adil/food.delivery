@@ -84,6 +84,15 @@ class Controller {
             next(err)
         }
     }
+
+    async getProfileBonuses(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await service.getProfileBonuses(req.user as PayloadDto)
+            return res.json(data)
+        } catch (err) {
+            next(err)
+        }
+    }
 }
 
 export default new Controller()

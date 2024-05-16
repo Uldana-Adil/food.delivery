@@ -1,3 +1,4 @@
+import { AxiosError } from "axios"
 import ActivateRequest from "../types/auth/ActivateRequest"
 import LoginRequest from "../types/auth/LoginRequest"
 import RegisterRequest from "../types/auth/RegisterRequest"
@@ -10,7 +11,7 @@ class AuthService {
         this.baseURL = '/api/auth'
     }
 
-    async login(formData:LoginRequest) {
+    async login(formData: LoginRequest) {
         const response = await HOST.post(`${this.baseURL}/login`, formData)
         return response
     }
@@ -21,26 +22,32 @@ class AuthService {
     }
 
     async refresh() {
-        const response = await HOST.get(`${this.baseURL}/refresh`)
-        return response
+        try {
+            const response = await HOST.get(`${this.baseURL}/refresh`)
+            return response
+        } catch (e: any) {
+            console.log(e)
+            return e.response
+
+        }
     }
 
-    async register(formData:RegisterRequest) {
+    async register(formData: RegisterRequest) {
         const response = await HOST.post(`${this.baseURL}/register`, formData)
         return response
     }
 
-    async resetPassword(email:string) {
-        const response = await HOST.post(`${this.baseURL}/resetPassword`, {email})
+    async resetPassword(email: string) {
+        const response = await HOST.post(`${this.baseURL}/resetPassword`, { email })
         return response
     }
 
-    async resetPasswordPost(formData:ResetPasswordRequest) {
+    async resetPasswordPost(formData: ResetPasswordRequest) {
         const response = await HOST.post(`${this.baseURL}/resetPasswordPost`, formData)
         return response
     }
 
-    async activate(formData:ActivateRequest) {
+    async activate(formData: ActivateRequest) {
         const response = await HOST.post(`${this.baseURL}/activate`, formData)
         return response
     }

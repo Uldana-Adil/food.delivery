@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { Product } from "./product.entity";
+import { Promotion } from "./promotion.entity";
 
 @Entity()
 export class ProductType extends BaseEntity {
@@ -15,4 +16,7 @@ export class ProductType extends BaseEntity {
 
     @OneToMany(()=>Product, product => product.productType)
     products!:Product[]
+
+    @ManyToMany(()=>Promotion, promotion => promotion.productTypes)
+    promotions!:Promotion[]
 }

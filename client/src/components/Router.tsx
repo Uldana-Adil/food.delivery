@@ -13,6 +13,7 @@ import CheckoutPage from '../pages/checkout/Page'
 import Reset from '../pages/auth/Reset';
 import CatalogPage from '../pages/catalog/Page'
 import ProfilePage from '../pages/profile/Page'
+import ProductPage from '../pages/product/Page'
 type Props = {}
 
 const Router = (props: Props) => {
@@ -24,6 +25,7 @@ const Router = (props: Props) => {
     <Route path="/checkout" element={<CheckoutPage />} />
     <Route path="/profile" element={<ProfilePage/>}/>
     <Route path="/profile/:key" element={<ProfilePage/>}/>
+    <Route path="/catalog/:id" element={<ProductPage />} />
     {/* Auth */}
     <Route path='/auth/login' element={<LoginPage />} />
     <Route path='/auth/login/:source' element={<LoginPage />} />

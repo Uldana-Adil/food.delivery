@@ -20,6 +20,7 @@ const Page = (props: Props) => {
     const { authStore } = useStores()
     const navigator = useNavigate()
 
+
     const update = () => {
         profileService.getProfileInfo().then((response) => {
             setProfile(response.data)
@@ -41,7 +42,10 @@ const Page = (props: Props) => {
             <div className="title-banner">
                 <img src={APP_CONFIG.PROFILE_BANNER} alt="" />
                 <div className="title-banner-content">
-                    <Container><h2>Личный кабинет</h2></Container>
+                    <Container>
+                        <h2>Личный кабинет</h2>
+                    </Container>
+                    
                 </div>
             </div>
             <Container className='pt-5'>

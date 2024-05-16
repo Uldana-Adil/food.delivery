@@ -4,6 +4,7 @@ import APP_CONFIG from '../../app.config'
 import { Link } from 'react-router-dom'
 import { useStores } from '../../store/MobXProvider'
 import { observer } from 'mobx-react-lite'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 type Props = {
     product: IProduct
@@ -31,13 +32,29 @@ const ProductListItem = (props: Props) => {
             </Link>
             <small>Артикул: {props.product.article}</small>
             <Link to={link}>
-                
+
                 <p className='product-list-item-name'>{props.product.name}</p>
             </Link>
 
             <p className="product-list-item-price">
                 <i className="fa-solid fa-tenge-sign me-1"></i>
-                {props.product.price}
+                {
+                    props.product.promotion ? <>
+                        <span className='text-muted me-2' style={{ textDecoration: 'line-through' }}>{props.product.price}</span>
+                        <OverlayTrigger overlay={<Tooltip id={'t-' + props.product.id}>
+                            {props.product.promotion.name} <br />
+                            Скидка {props.product.promotion.discount} % <br />
+                            {props.product.promotion.description}
+                        </Tooltip>}>
+                            <span className="text-danger" style={{ fontSize: 24 }}>
+                                {props.product.price - (props.product.price * (props.product.promotion.discount / 100))}
+                            </span>
+                        </OverlayTrigger>
+                    </> : <>
+
+                        {props.product.price}
+                    </>
+                }
                 <span className='ms-2'>
                     за {props.product.dimensionValue} {props.product.dimensions}
                 </span>
@@ -50,8 +67,8 @@ const ProductListItem = (props: Props) => {
                         onClick={() => basketStore.addProduct({
                             productId: props.product.id,
                             amount: 1,
-                            price: props.product.price,
-                            saleType:'retail'
+                            price: (props.product.promotion ? props.product.price-(props.product.price * (props.product.promotion?.discount / 100)) : props.product.price),
+                            saleType: 'retail'
                         })}>
                         <i className="fa-solid fa-cart-plus"></i>
                     </button>

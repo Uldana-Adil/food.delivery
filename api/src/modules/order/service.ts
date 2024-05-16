@@ -12,6 +12,9 @@ import productService from '../product/service';
 import userPaymentCardService from '../userPaymentCard/service';
 import orderStatusService from '../orderStatus/service'
 import { OrderStatusHistory } from '../../entities/orderStatusHistory.entity';
+import OrderDto from './dto/orderDto';
+import { OrderSetStatusRequest } from './dto/orderSetStatus.request';
+import bonusTransaction from '../bonusTransaction/service';
 
 class Service {
 
@@ -106,12 +109,26 @@ class Service {
                     }
                 }
             },
-            relations: ['products', 'products.product', 'products.product.images', 'products.product.productType', 'userAddress', 'userAddress.city', 'userAddress.cityDistrict', 'userPaymentCard', 'orderStatusHistories.orderStatus', 'orderStatusHistories'],
+            relations: ['products', 'products.product', 'products.product.images', 'products.product.productType', 'userAddress','userAddress.user', 'userAddress.city', 'userAddress.cityDistrict', 'userPaymentCard', 'orderStatusHistories.orderStatus', 'orderStatusHistories'],
             order: {
                 id: 'DESC'
             }
         })
+        list.forEach(order => {
+            order.orderStatusHistories = order.orderStatusHistories!.sort((a,b)=>b.id-a.id)
+        })
         return list
+    }
+
+    async findAllForAdmin(): Promise<OrderDto[]> {
+        const list = await this.orderRepository.find({
+            where:{deleted:false},
+            relations: ['products', 'products.product', 'products.product.images', 'products.product.productType', 'userAddress','userAddress.user', 'userAddress.city', 'userAddress.cityDistrict', 'userPaymentCard', 'orderStatusHistories.orderStatus', 'orderStatusHistories'],
+            order: {
+                createdAt: 'DESC'
+            }
+        })
+        return list.map(order => new OrderDto(order))
     }
 
     async findOne(id: number, payload: PayloadDto): Promise<Order | null> {
@@ -128,6 +145,40 @@ class Service {
         return order
     }
 
+    async setStatus(request:OrderSetStatusRequest, payload: PayloadDto):Promise<void> {
+        const status = await orderStatusService.findByCode(request.statusCode)
+        if (!status) {
+            throw ErrorResponse.notFound('ORDER_STATUS_NOT_FOUND')
+        }
+        const order = await this.orderRepository.findOne({
+            where: {
+                id:request.id,
+                deleted:false
+            },
+            relations:['userAddress','userAddress.user','products']
+        })
+        if (!order) {
+            throw ErrorResponse.notFound('ORDER_NOT_FOUND')
+        }
+        if(request.statusCode === 'DELIVERED') {
+            await bonusTransaction.setTransaction({
+                orderId: order.id,
+                amount: order.products!.reduce((acc, item)=> acc + (item.price * item.amount), 0)*0.05,
+                type:'add',
+            }, {
+                email: order.userAddress!.user!.email,
+                id: order.userAddress!.user!.id,
+                phone: order.userAddress!.user!.phone
+            })
+        }
+        if(request.statusCode === 'CANCELED') {
+            await bonusTransaction.cancelTransaction(order.id)
+        }
+        const orderStatusHistory = new OrderStatusHistory()
+        orderStatusHistory.order = order
+        orderStatusHistory.orderStatus = status
+        await this.orderStatusHistoryRepository.save(orderStatusHistory)
+    }
 }
 
 export default new Service();

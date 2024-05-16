@@ -1,16 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStores } from '../../store/MobXProvider'
 import { observer } from 'mobx-react-lite'
 import { Button, Dropdown } from 'react-bootstrap'
+import profileService from '../../services/profile-service'
 
 type Props = {}
 
 const AuthStatus = (props: Props) => {
     const { authStore } = useStores()
+
+// 
+    profileService.getBonuses().then((response) => {
+        authStore.setBonus(response.data)
+    }).catch((error) => {
+        console.log(error)
+    })
+
     return <>
         {
             authStore.isAuth ? <>
+                <p className='mb-0 me-3'><span className='h5'>{authStore.currentBonus}</span> бонусов</p>
                 <Dropdown  align="end">
                     <Dropdown.Toggle id="dropdown-basic">
                         {authStore.user?.email}

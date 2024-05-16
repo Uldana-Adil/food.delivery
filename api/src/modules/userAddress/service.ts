@@ -14,13 +14,13 @@ class Service {
         this.repository = AppDataSource.getRepository(UserAddress)
     }
     async findAll(userId: number): Promise<UserAddress[]> {
-        return this.repository.find({ relations: ['city', 'cityDistrict'], where: { user: { id: userId } } })
+        return this.repository.find({ relations: ['city', 'cityDistrict','user'], where: { user: { id: userId } } })
     }
 
     async findOne(id: number): Promise<UserAddress | null> {
         return this.repository.findOne({ 
             where:{id},
-            relations:['city','cityDistrict']
+            relations:['city','cityDistrict','user']
          })
     }
 

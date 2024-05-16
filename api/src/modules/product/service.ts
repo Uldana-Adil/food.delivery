@@ -48,6 +48,8 @@ class Service {
         .createQueryBuilder('product')
         .innerJoinAndSelect('product.images','images')
         .innerJoinAndSelect('product.productType', 'productType')
+        .leftJoinAndSelect('product.promotions','promotions')
+        .leftJoinAndSelect('productType.promotions','productTypePromotions')
         .where((qb)=>{
             qb.andWhere('product.deleted = :deleted', {deleted:false})
             qb.andWhere('images.deleted = :deleted', {deleted:false})
@@ -70,7 +72,7 @@ class Service {
     async findOne(id:number):Promise<Product | null> {
         return this.repository.findOne({
             where:{id:id},
-            relations:['images','productType']
+            relations:['images','productType','promotions','productType.promotions']
         })
     }
 

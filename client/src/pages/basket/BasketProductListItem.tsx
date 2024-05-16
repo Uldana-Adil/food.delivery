@@ -35,7 +35,7 @@ const BasketProductListItem = (props: Props) => {
                 <div className='flex-grow-1 d-flex justify-content-between'>
                     <div className='flex-grow-1'>
                         <p className='basket-product-list-item-name'>
-                            {product.name}
+                            {product.name} (Арт.: {product.article})
                         </p>
                         <div className="basket-product-list-item-counter d-flex align-items-center" style={{gap:50}}>
                             <InputGroup size="sm" className='position-relative'>
@@ -73,7 +73,9 @@ const BasketProductListItem = (props: Props) => {
                                         basketStore.changeSaleType(props.product, 'retail')
                                         setStep(1)
                                         basketStore.setProductAmount(props.product.productId, 1)
-                                        basketStore.changePrice(props.product, product.price)
+                                        basketStore.changePrice(props.product, 
+                                            product.promotion ? product.price - (product.price * product.promotion.discount/100) : product.price
+                                        )
                                     }}
                                 />
                                 <Form.Check
@@ -85,7 +87,9 @@ const BasketProductListItem = (props: Props) => {
                                         basketStore.changeSaleType(props.product, 'wholesale')
                                         setStep(product.whosaleQuantity)
                                         basketStore.setProductAmount(props.product.productId, product.whosaleQuantity)
-                                        basketStore.changePrice(props.product, product.whosalePrice)
+                                        basketStore.changePrice(props.product, 
+                                            product.promotion ? product.whosalePrice - (product.whosalePrice * product.promotion.discount/100) : product.whosalePrice
+                                        )
                                     }}
                                 />
                             </div>
@@ -97,9 +101,15 @@ const BasketProductListItem = (props: Props) => {
                         <button className='basket-product-list-item-delete' onClick={() => basketStore.removeProduct(props.product)}>
                             <i className="fa-solid fa-xmark"></i>
                         </button>
-                        <p className='basket-product-list-item-price'>
+                        
+                       <p className='basket-product-list-item-price mb-0'>
                             {formatNumberWithSpaces(props.product.price * props.product.amount)} <i className="fa-solid fa-tenge-sign"></i>
                         </p>
+                        {
+                            product.promotion && <small>
+                            Скидка: {product.promotion.discount} %
+                        </small>
+                        }
                     </div>
                 </div>
 

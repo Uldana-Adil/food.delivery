@@ -41,6 +41,11 @@ class ProfileService {
         const response = await HOST.put(`${this.baseURL}/password`, dto)
         return response
     }
+
+    async getBonuses() {
+        const response = await HOST.get(`${this.baseURL}/bonuses`)
+        return response
+    }
 }
 
 const profileService = new ProfileService()

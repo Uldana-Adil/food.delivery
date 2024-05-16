@@ -8,6 +8,7 @@ export default class OrderCreateDto {
     userNewAddress?: UserAddressCreateDto
     userPaymentCardId?:number
     userNewPaymentCard?:UserPaymentCardCreateDto
+    usedBonusAmount?:number
 
     products!:OrderCreateProductDto[]
 }

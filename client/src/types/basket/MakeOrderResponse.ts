@@ -9,6 +9,7 @@ export default class MakeOrderResponse {
     userPaymentCardId?:number
     userNewPaymentCard?:PaymentCreateResponse
     products:MakeOrderProductItem[]
+    usedBonusAmount?:number
     constructor() {
         this.products = []
     }

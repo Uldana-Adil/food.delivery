@@ -1,4 +1,5 @@
 import { IProductType } from "./IProductType";
+import { IPromotion } from "./IPromotion";
 
 export interface IProduct {
     id: number;
@@ -12,4 +13,5 @@ export interface IProduct {
     images: string[];
     whosalePrice:number
     whosaleQuantity:number
+    promotion:IPromotion
 }

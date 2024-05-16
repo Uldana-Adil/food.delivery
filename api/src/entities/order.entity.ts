@@ -4,6 +4,7 @@ import { OrderProduct } from "./orderProduct.entity";
 import { UserAddress } from "./userAddress.entity";
 import { UserPaymentCard } from "./userPaymentCard.entity";
 import { OrderStatusHistory } from "./orderStatusHistory.entity";
+import { BonusTransactions } from "./bonusTransactions.entity";
 
 @Entity()
 export class Order extends BaseEntity {
@@ -22,4 +23,7 @@ export class Order extends BaseEntity {
 
     @OneToMany(()=>OrderStatusHistory, osh=>osh.order)
     orderStatusHistories?: OrderStatusHistory[]
+
+    @OneToMany(()=>BonusTransactions, bt=>bt.order)
+    bonusTransactions?: BonusTransactions
 }

@@ -2,6 +2,7 @@ import { BaseEntity } from "./base.entity";
 import { Column, Entity, OneToMany } from 'typeorm'
 import { UserAddress } from "./userAddress.entity";
 import { UserPaymentCard } from "./userPaymentCard.entity";
+import { BonusTransactions } from "./bonusTransactions.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -31,4 +32,7 @@ export class User extends BaseEntity {
 
     @OneToMany(() => UserPaymentCard, (userPaymentCard) => userPaymentCard.user)
     userPaymentCards!: UserPaymentCard[]
+
+    @OneToMany(()=>BonusTransactions, (bonusTransactions)=>bonusTransactions.user)
+    bonusTransactions!:BonusTransactions[]
 }

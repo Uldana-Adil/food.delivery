@@ -4,6 +4,7 @@ import authService from '../services/auth-service'
 class AuthStore {
     isAuth: boolean = false
     user?: IUser
+    currentBonus: number = 0
     constructor() {
         makeAutoObservable(this)
     }
@@ -14,6 +15,10 @@ class AuthStore {
 
     setUser(user: IUser) {
         this.user = user
+    }
+
+    setBonus(bonus: number) {
+        this.currentBonus = bonus
     }
 
     logout() {

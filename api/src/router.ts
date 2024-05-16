@@ -8,6 +8,8 @@ import profileRouter from './modules/profile/router'
 import orderStatusRouter from './modules/orderStatus/router'
 import basketRouter from './modules/basket/router'
 import catalogRouter from './modules/catalog/router'
+import orderRouter from './modules/order/router'
+import promotionRouter from './modules/promotion/router'
 
 import { authMiddleware } from './middlewares/auth.middleware'
 import { adminMiddleware } from './middlewares/admin.middleware'
@@ -24,5 +26,7 @@ router.use('/profile', authMiddleware, profileRouter)
 router.use('/orderStatus', authMiddleware, adminMiddleware, orderStatusRouter)
 router.use('/basket', authMiddleware, basketRouter)
 router.use('/catalog', catalogRouter)
+router.use('/order', authMiddleware, orderRouter)
+router.use('/promotion', authMiddleware, adminMiddleware, promotionRouter)
 
 export default router

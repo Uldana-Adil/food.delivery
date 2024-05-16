@@ -12,6 +12,7 @@ export default class OrderDto {
     address: ProfileAddressDto
     payment: ProfilePaymentCardDto
     statusHistories: OrderStatusHistoryDto[]
+    phone:string
     constructor(data: Order) {
         this.id = data.id
         this.date = data.createdAt
@@ -23,6 +24,7 @@ export default class OrderDto {
             this.statusHistories = this.statusHistories.sort((a,b)=>b.date.getTime()-a.date.getTime())
         }
         this.comment = data.comment ?? 'Заказ без комментариев'
+        this.phone = data.userAddress.user.phone
     }
 
 }
